@@ -4,13 +4,14 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import confusion_matrix
 
 import numpy as np
 import pandas as pd
 import time
 
-train_dataset = pd.read_csv('./dataset/Train.csv', delimiter=' ')
-test_dataset = pd.read_csv('./dataset/Test.csv', delimiter=' ')
+train_dataset = pd.read_csv('./transformed_dataset/Train.csv', delimiter=' ')
+test_dataset = pd.read_csv('./transformed_dataset/Test.csv', delimiter=' ')
 
 train_data = train_dataset.drop(columns=['label'])
 test_data = test_dataset.drop(columns=['label'])
@@ -24,18 +25,29 @@ k = 1
 knn = KNeighborsClassifier(n_neighbors=k)
 knn.fit(train_data, train_labels)
 print('k = {}'.format(k), knn.score(test_data, test_labels))
+knn_predict = knn.predict(test_data)
+print(confusion_matrix(test_labels, knn_predict))
+
 k = 3
 knn = KNeighborsClassifier(n_neighbors=k)
 knn.fit(train_data, train_labels)
 print('k = {}'.format(k), knn.score(test_data, test_labels))
+knn_predict = knn.predict(test_data)
+print(confusion_matrix(test_labels, knn_predict))
+
 k = 5
 knn = KNeighborsClassifier(n_neighbors=k)
 knn.fit(train_data, train_labels)
 print('k = {}'.format(k), knn.score(test_data, test_labels))
+knn_predict = knn.predict(test_data)
+print(confusion_matrix(test_labels, knn_predict))
+
 k = 7
 knn = KNeighborsClassifier(n_neighbors=k)
 knn.fit(train_data, train_labels)
 print('k = {}'.format(k), knn.score(test_data, test_labels))
+knn_predict = knn.predict(test_data)
+print(confusion_matrix(test_labels, knn_predict))
 
 print('------ SVM ------')
 
