@@ -1,38 +1,35 @@
 from skimage.feature import hog, canny, local_binary_pattern
+from skimage.filters import threshold_otsu
 from skimage import data, exposure, io, transform
 import os
 import numpy as np
 
 
-def compute_hog(image_path):
+def compute_hog_parametrized(image_path, orientations, image_size, pixels_per_cell, filter_):
     image = io.imread(image_path)
-    image = transform.resize(image=image, output_shape=(50, 50))
+    image = transform.resize(
+        image=image, output_shape=(image_size, image_size))
 
-    fd = hog(image, orientations=8, pixels_per_cell=(16, 16),
-             cells_per_block=(1, 1), multichannel=False,)
+    if filter_:
+        thresh = threshold_otsu(image)
+        binary = (image > thresh).astype(np.float32)
+
+        fd = hog(binary, orientations=orientations, pixels_per_cell=(pixels_per_cell, pixels_per_cell),
+                 cells_per_block=(1, 1), multichannel=False,)
+    else:
+        fd = hog(image, orientations=orientations, pixels_per_cell=(pixels_per_cell, pixels_per_cell),
+                 cells_per_block=(1, 1), multichannel=False,)
     return fd
 
 
-def compute_hog_experiments(image_path):
-    image = io.imread(image_path)
-
-    height = len(image)
-    width = len(image[0])
-
-    image = transform.resize(image=image, output_shape=(100, 100))
-
-    fd = hog(image, orientations=8, pixels_per_cell=(20, 20),
-             cells_per_block=(1, 1), multichannel=False,)
-    return fd
-
-
-def build_dataset_hog(type):
-    base = './dataset/{}'.format(type)
+def build_dataset_hog_parametrized(orientations, image_size, pixels_per_cell, filter_):
+    base = './dataset/Train'
     out = open(base + '.csv', 'w')
     first = True
     for folder in os.listdir(base):
         for image_path in os.listdir(base+'/'+folder):
-            hog_ = compute_hog(base+'/'+folder+'/'+image_path)
+            hog_ = compute_hog_parametrized(base+'/'+folder+'/'+image_path,
+                                            orientations, image_size, pixels_per_cell, filter_)
             if first:
                 out.write(' '.join('f{}'.format(i) for i in range(len(hog_))))
                 out.write(' label\n')
@@ -41,14 +38,13 @@ def build_dataset_hog(type):
             out.write(x + ' ' + folder + '\n')
     out.close()
 
-
-def build_dataset_experiments(type):
-    base = './dataset/{}'.format(type)
+    base = './dataset/Test'
     out = open(base + '.csv', 'w')
     first = True
     for folder in os.listdir(base):
         for image_path in os.listdir(base+'/'+folder):
-            hog_ = compute_hog_experiments(base+'/'+folder+'/'+image_path)
+            hog_ = compute_hog_parametrized(base+'/'+folder+'/'+image_path,
+                                            orientations, image_size, pixels_per_cell, filter_)
             if first:
                 out.write(' '.join('f{}'.format(i) for i in range(len(hog_))))
                 out.write(' label\n')
@@ -56,7 +52,3 @@ def build_dataset_experiments(type):
             x = ' '.join([str(x) for x in hog_])
             out.write(x + ' ' + folder + '\n')
     out.close()
-
-
-build_dataset_experiments('Train')
-build_dataset_experiments('Test')
