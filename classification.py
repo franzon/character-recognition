@@ -8,10 +8,12 @@ from sklearn.metrics import confusion_matrix
 
 import numpy as np
 import pandas as pd
+import seaborn as sn
+import matplotlib.pyplot as plt
 import time
 
-train_dataset = pd.read_csv('./transformed_dataset/Train.csv', delimiter=' ')
-test_dataset = pd.read_csv('./transformed_dataset/Test.csv', delimiter=' ')
+train_dataset = pd.read_csv('./dataset/Train.csv', delimiter=' ')
+test_dataset = pd.read_csv('./dataset/Test.csv', delimiter=' ')
 
 train_data = train_dataset.drop(columns=['label'])
 test_data = test_dataset.drop(columns=['label'])
@@ -20,92 +22,19 @@ train_labels = train_dataset['label'].values
 test_labels = test_dataset['label'].values
 
 print('------ k-NN ------')
+labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 k = 1
 knn = KNeighborsClassifier(n_neighbors=k)
 knn.fit(train_data, train_labels)
-print('k = {}'.format(k), knn.score(test_data, test_labels))
 knn_predict = knn.predict(test_data)
-print(confusion_matrix(test_labels, knn_predict))
-
-k = 3
-knn = KNeighborsClassifier(n_neighbors=k)
-knn.fit(train_data, train_labels)
-print('k = {}'.format(k), knn.score(test_data, test_labels))
-knn_predict = knn.predict(test_data)
-print(confusion_matrix(test_labels, knn_predict))
-
-k = 5
-knn = KNeighborsClassifier(n_neighbors=k)
-knn.fit(train_data, train_labels)
-print('k = {}'.format(k), knn.score(test_data, test_labels))
-knn_predict = knn.predict(test_data)
-print(confusion_matrix(test_labels, knn_predict))
-
-k = 7
-knn = KNeighborsClassifier(n_neighbors=k)
-knn.fit(train_data, train_labels)
-print('k = {}'.format(k), knn.score(test_data, test_labels))
-knn_predict = knn.predict(test_data)
-print(confusion_matrix(test_labels, knn_predict))
-
-print('------ SVM ------')
-
-kernel = 'linear'
-svm = SVC(kernel=kernel, gamma='auto')
-svm.fit(train_data, train_labels)
-print('kernel = {}'.format(kernel), svm.score(test_data, test_labels))
-
-kernel = 'linear'
-svm = SVC(kernel=kernel, C=0.5)
-svm.fit(train_data, train_labels)
-print('kernel = {} C=0.5'.format(kernel), svm.score(test_data, test_labels))
-
-kernel = 'linear'
-svm = SVC(kernel=kernel, C=0.25)
-svm.fit(train_data, train_labels)
-print('kernel = {} C=0.25'.format(kernel), svm.score(test_data, test_labels))
+print(knn.score(test_data, test_labels))
 
 
-kernel = 'linear'
-svm = SVC(kernel=kernel, C=0.1)
-svm.fit(train_data, train_labels)
-print('kernel = {} C=0.1'.format(kernel), svm.score(test_data, test_labels))
+cm_train = confusion_matrix(test_labels, knn_predict)
+df_cm = pd.DataFrame(cm_train, index=[i for i in labels],
+                     columns=[i for i in labels])
 
-
-kernel = 'poly'
-svm = SVC(kernel=kernel, degree=8, gamma='auto')
-svm.fit(train_data, train_labels)
-print('kernel = {}'.format(kernel), svm.score(test_data, test_labels))
-
-kernel = 'rbf'
-svm = SVC(kernel=kernel, gamma='auto')
-svm.fit(train_data, train_labels)
-print('kernel = {}'.format(kernel), svm.score(test_data, test_labels))
-
-kernel = 'sigmoid'
-svm = SVC(kernel=kernel, gamma='auto')
-svm.fit(train_data, train_labels)
-print('kernel = {}'.format(kernel), svm.score(test_data, test_labels))
-
-print('------ Decision Tree ------')
-
-max_depth = 13
-dtree = DecisionTreeClassifier(max_depth=max_depth)
-dtree.fit(train_data, train_labels)
-print('max_depth = {}'.format(max_depth), dtree.score(test_data, test_labels))
-
-print('------ Naive Bayes ------')
-
-dtree = GaussianNB()
-dtree.fit(train_data, train_labels)
-print(dtree.score(test_data, test_labels))
-
-print('------ Multi Layer Perceptron ------')
-
-alpha = 1
-max_iter = 200
-mlp = MLPClassifier(alpha=alpha, max_iter=max_iter,)
-mlp.fit(train_data, train_labels)
-print('alpha = {} max_iter = {}'.format(alpha, max_iter),
-      mlp.score(test_data, test_labels))
+plt.figure(figsize=(20, 20))
+sn.heatmap(df_cm, annot=True)
+plt.show()

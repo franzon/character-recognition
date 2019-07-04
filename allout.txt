@@ -1,0 +1,39 @@
+hey
+image_size = 25  pixels_per_cell = 5 
+------ k-NN ------
+k = 1 0.8674315383971192
+521.6565532684326 segundos
+k = 3 0.8788208692739301
+519.5892117023468 segundos
+k = 5 0.8822544175529687
+519.9257614612579 segundos
+------ SVM ------
+kernel = linear 0.9124863914245038
+210.14942049980164 segundos
+kernel = linear C=0.5 0.9154174692236831
+220.50849390029907 segundos
+kernel = linear C=0.1 0.91039276442509
+295.05682277679443 segundos
+------ Decision Tree ------
+max_depth = 5 0.3805376434134495
+6.268140554428101 segundos
+max_depth = 15 0.6745666192111214
+15.779581546783447 segundos
+
+
+image_size = 25  pixels_per_cell = 10 
+------ k-NN ------
+Traceback (most recent call last):
+  File "script.py", line 105, in <module>
+    classification()
+  File "script.py", line 31, in classification
+    knn.fit(train_data, train_labels)
+  File "/home/jorge/.local/lib/python3.7/site-packages/sklearn/neighbors/base.py", line 892, in fit
+    X, y = check_X_y(X, y, "csr", multi_output=True)
+  File "/home/jorge/.local/lib/python3.7/site-packages/sklearn/utils/validation.py", line 719, in check_X_y
+    estimator=estimator)
+  File "/home/jorge/.local/lib/python3.7/site-packages/sklearn/utils/validation.py", line 542, in check_array
+    allow_nan=force_all_finite == 'allow-nan')
+  File "/home/jorge/.local/lib/python3.7/site-packages/sklearn/utils/validation.py", line 56, in _assert_all_finite
+    raise ValueError(msg_err.format(type_err, X.dtype))
+ValueError: Input contains NaN, infinity or a value too large for dtype('float64').
