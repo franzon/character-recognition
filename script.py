@@ -4,6 +4,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import RandomForestClassifier
 from time import time
 import numpy as np
 import pandas as pd
@@ -87,6 +88,14 @@ def classification():
     dtree.fit(train_data, train_labels)
     print('max_depth = {}'.format(max_depth),
           dtree.score(test_data, test_labels))
+    print(time.time()-t0, 'segundos')
+
+    print('------ RandomForest ------')
+    t0 = time.time()
+    numberOfTrees = 100
+    randomForest = RandomForestClassifier(n_estimators = numberOfTrees, min_samples_leaf=42)
+    randomForest.fit(test_data, test_labels)
+	print('Numero de Árvores = {}'.format(numberOfTrees), randomForest.score(test_data, test_labels))
     print(time.time()-t0, 'segundos')
 
 
