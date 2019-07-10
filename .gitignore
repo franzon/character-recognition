@@ -1,2 +1,4 @@
 ./dataset/**
 ./bkp/**
+dataset/
+character_dataset/

@@ -11,8 +11,8 @@ for i in ['Test', 'Train', 'Valid']:
         c = line.split('/')[1].upper()
         f = line.split('/')[2]
 
-        if not os.path.exists('./transformed_dataset/{}/'.format(i)+c):
-            os.makedirs('./transformed_dataset/{}/'.format(i)+c)
+        if not os.path.exists('./dataset/{}/'.format(i)+c):
+            os.makedirs('./dataset/{}/'.format(i)+c)
 
         copyfile('./character_dataset/' + c + '/' + f,
-                 './transformed_dataset/{}/'.format(i) + c + '/' + f)
+                 './dataset/{}/'.format(i) + c + '/' + f)
