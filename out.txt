@@ -1,2 +1,0 @@
-hey
-image_size = 25  pixels_per_cell = 5 
