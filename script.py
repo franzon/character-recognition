@@ -92,17 +92,18 @@ def classification():
 
     print('------ RandomForest ------')
     t0 = time.time()
-    numberOfTrees = 100
-    randomForest = RandomForestClassifier(n_estimators = numberOfTrees, min_samples_leaf=42)
-    randomForest.fit(test_data, test_labels)
-	print('Numero de Árvores = {}'.format(numberOfTrees), randomForest.score(test_data, test_labels))
+    numberOfTrees = 120
+    randomForest = RandomForestClassifier(
+        n_estimators=numberOfTrees, min_samples_leaf=1)
+    randomForest.fit(train_data, train_labels)
+    print('Numero de Árvores = {}'.format(numberOfTrees),
+          randomForest.score(test_data, test_labels))
     print(time.time()-t0, 'segundos')
 
 
-sizes = [25]
-pixels_per_cells = [7]
+sizes = [50]
+pixels_per_cells = [10]
 
-print('hey')
 for size in sizes:
     for pixels_per_cell in pixels_per_cells:
 
